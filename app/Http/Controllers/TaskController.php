@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Task;
 use Illuminate\Http\Request;
 
+
 class TaskController extends Controller
 {
     /**
@@ -14,7 +15,10 @@ class TaskController extends Controller
      */
     public function index()
     {
-        //
+        $tasks = Task::all();
+        return response()->json([
+            'tasks'=>$tasks
+        ],201);
     }
 
     /**
@@ -24,9 +28,7 @@ class TaskController extends Controller
      */
     public function create()
     {
-        return response()->json([
-            'message'=>'User successfully created'
-        ],200);
+        //
     }
 
     /**
@@ -37,7 +39,11 @@ class TaskController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $input = $request->all();
+        Task::create($input);
+        return response()->json([
+            'message'=>'created!'
+        ],201);
     }
 
     /**
@@ -46,11 +52,12 @@ class TaskController extends Controller
      * @param  \App\Models\Task  $task
      * @return \Illuminate\Http\Response
      */
-    public function show(Task $task)
+    public function show($id)
     {
+        $task = Task::find($id);
         return response()->json([
-            'message'=>'User successfully showed'
-        ],200);
+            'task'=>$task
+        ],201);
     }
 
     /**
@@ -61,7 +68,7 @@ class TaskController extends Controller
      */
     public function edit(Task $task)
     {
-        
+        //
     }
 
     /**
@@ -71,11 +78,16 @@ class TaskController extends Controller
      * @param  \App\Models\Task  $task
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Task $task)
+    public function update(Request $request,$id)
     {
+        $contact = Task::find($id);
+        $input = $request->all();
+        $contact->update($input);
         return response()->json([
-            'message'=>'User successfully updated'
-        ],200);
+            'message'=>'updated!'
+        ],201);
+
+        
     }
 
     /**
@@ -84,10 +96,11 @@ class TaskController extends Controller
      * @param  \App\Models\Task  $task
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Task $task)
+    public function destroy($id)
     {
+        Task::destroy($id);
         return response()->json([
-            'message'=>'User successfully deleted'
-        ],200);
+            'message'=>'deleted!'
+        ],201);
     }
 }
