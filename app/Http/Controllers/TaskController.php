@@ -17,14 +17,12 @@ class TaskController extends Controller
 
         try {
             $result = Task::all();
-            return response()->json([
-                'tasks'=>$result
-            ],201);
+            return response()->json($result,201);
           
           } catch (Throwable $e) {
           
             return response()->json([
-                'message'=>'Ye'
+                'message'=>'Something went wrong'
             ],400);
           }
     }
@@ -51,9 +49,7 @@ class TaskController extends Controller
     {
         $result = Task::find($id);
         if($result){
-            return response()->json([
-                'task'=>$result
-            ],201);
+            return response()->json($result,201);
         }else{
             return response()->json([
                 'error'=>$result,
@@ -73,7 +69,6 @@ class TaskController extends Controller
         return response()->json([
             'message'=>'updated!'
         ],201);
-
         }else{
             return response()->json([
                 'message'=>'User not Found!'
