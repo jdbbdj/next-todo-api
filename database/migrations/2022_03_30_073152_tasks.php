@@ -17,6 +17,9 @@ return new class extends Migration
             $table->id();
             $table->string('tasktitle');
             $table->string('description');
+            $table->date('startdate');
+            $table->date('enddate');
+            $table->boolean('done');
             $table->timestamps();
         });
     }
