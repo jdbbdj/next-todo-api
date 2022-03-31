@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Auth;
 use Validator;
+use Hash;
 use App\Models\User;
 
 class AuthController extends Controller 
@@ -45,9 +46,22 @@ class AuthController extends Controller
 
         if($validator->fails()){
             return response()->json($validator->errors(),422);
+        }else{
+        $email = $request['email'];
+        $password = $request['password'];
+
+
+        $user = User::where('email', '=', $email)->first();   
+        if(Hash::check($password, $user->password)) {
+            
+            
+            $token=auth()->attempt($validator->validated());
+            return response()->json(['message'=>'password is correct','token'=>$this->createNewToken($token)],200);
+
+         } else {
+            return response()->json(['message'=>'Please check your credentials'],400);
         }
-        $token=auth()->attempt($validator->validated());
-        return $this->createNewToken($token);
+        }
     }
 
     public function createNewToken($token){
@@ -60,7 +74,12 @@ class AuthController extends Controller
     }
 
     public function profile(){
-        return response()->json(auth()->user());
+        $result =(auth()->user());
+        if($result){
+            return response()->json([$result],200);
+        }else{
+            return response()->json(['message'=>'Token not found, please login again'],400);
+        }
     }
 
     public function logout(){
